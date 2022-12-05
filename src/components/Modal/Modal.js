@@ -10,12 +10,12 @@ export default class Modal extends Component {
 
     
     componentDidMount() {
-        console.log('componentDidMount');
+        // console.log('componentDidMount');
         window.addEventListener('keydown', this.handleKeyDown)
     }
 
     componentWillUnmount() {
-        console.log('componentWillUnmount');
+        // console.log('componentWillUnmount');
         window.removeEventListener('keydown', this.handleKeyDown);
     }
 
@@ -25,12 +25,20 @@ export default class Modal extends Component {
 
       this.props.onClose();
     }
-  };
+    };
+    
+    handleBackdropClick = e => {
+        console.log('click backdrop');
+        // если текущий клик и целевой клик равны вызвать зактытие модалки
+        if (e.currentTarget === e.target) {
+            this.props.onClose();
+        }
+    }
 
 
 render() {
     return createPortal(
-        <div className={style.overlay}>
+        <div className={style.overlay} onClick={this.handleBackdropClick}>
             <div className={style.modal}>{this.props.children}</div>
         </div>,
         modalRoot,
