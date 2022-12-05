@@ -1,4 +1,4 @@
-import React, {Components} from "react";
+import React, {Component} from "react";
 
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
@@ -6,7 +6,7 @@ import ImageGalleryItem from "./ImageGalleryItem";
 import Modal from "./Modal";
 
 
-export default class App extends Components() {
+export default class App extends Component {
   state = {
         openModal: false
     }
@@ -17,9 +17,8 @@ export default class App extends Components() {
         <ImageGallery>
           <ImageGalleryItem />
         </ImageGallery>
-        <Modal>
-          <div>12245</div>
-        </Modal>
+        <Modal/>
+
 
       </div>
     
