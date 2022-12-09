@@ -1,6 +1,6 @@
-import style from './Searchbar.module.scss';
+import style from '../Searchbar/Searchbar.module.scss';
 import React, { Component } from "react";
-import SearchFormButton from './seachBarButton';
+// import SearchFormButton from '../SearchBarButton/seachBarButton';
 
 export default class Searchbar extends Component {
     render() { 
@@ -8,8 +8,8 @@ export default class Searchbar extends Component {
             <header className={style.searchbar}>
                 <form className={style.searchForm}>
 
-                    <SearchFormButton aria-label={'search button'} />
-                    
+                    {this.props.children}
+
                     <input
                         className={style.searchFormInput}
                         type="text"

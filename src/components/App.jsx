@@ -1,6 +1,11 @@
 import React, {Component} from "react";
 
 import Searchbar from './Searchbar';
+import SearchBarButton from "./SearchBarButton";
+
+import { ReactComponent as SearchIcon } from '../icons/search.svg';
+// импорт иконки как компонента
+
 import ImageGallery from './ImageGallery';
 import ImageGalleryItem from "./ImageGalleryItem";
 import Modal from "./Modal";
@@ -21,7 +26,12 @@ export default class App extends Component {
     const {openModal} = this.state;
     return (
       <div>
-        <Searchbar/>
+        <Searchbar>
+          <SearchBarButton aria-label={'search button'}>
+              <SearchIcon/>
+          </SearchBarButton>
+        </Searchbar>
+        
         <ImageGallery>
           <ImageGalleryItem/>
         </ImageGallery>
