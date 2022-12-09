@@ -7,10 +7,9 @@ export default class Searchbar extends Component {
         return (
             <header className={style.searchbar}>
                 <form className={style.searchForm}>
-                    <SearchFormButton/>
-                    
-                   
 
+                    <SearchFormButton aria-label={'search button'} />
+                    
                     <input
                         className={style.searchFormInput}
                         type="text"
