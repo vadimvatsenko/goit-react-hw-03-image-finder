@@ -21,7 +21,7 @@ export default class App extends Component {
     const {openModal} = this.state;
     return (
       <div>
-        <Searchbar />
+        <Searchbar/>
         <ImageGallery>
           <ImageGalleryItem/>
         </ImageGallery>
