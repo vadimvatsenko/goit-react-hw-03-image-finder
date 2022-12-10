@@ -10,11 +10,34 @@ import ImageGallery from './ImageGallery';
 import ImageGalleryItem from "./ImageGalleryItem";
 import Modal from "./Modal";
 
+import axios from "axios";
+
+axios.defaults.baseURL = "https://pixabay.com/api/"
+
 
 export default class App extends Component {
   state = {
-        openModal: false
+    openModal: false,
+
+    articles: [],
+    isLoading: false,
+    error: null,
   }
+
+  async componentDidMount() {
+    this.setState({ isLoading: true });
+
+    try {
+      const response = await axios.get("?key=29703536-3492bea623abb7896113a32cf&q=yellow+flowers&image_type=photo");
+      this.setState({ articles: response.data.hits });
+    } catch (error) {
+      this.setState({ error });
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  }
+
+
   
   toggleModal = () => {
     this.setState(state => ({
@@ -23,7 +46,7 @@ export default class App extends Component {
   };
 
   render() {
-    const {openModal} = this.state;
+    const {openModal, articles} = this.state;
     return (
       <div>
         <Searchbar>
@@ -33,7 +56,7 @@ export default class App extends Component {
         </Searchbar>
         
         <ImageGallery>
-          <ImageGalleryItem/>
+          <ImageGalleryItem articles={articles } />
         </ImageGallery>
         <button type='button' onClick={this.toggleModal}>openModal</button>
         {openModal && <Modal onClose={this.toggleModal}>
