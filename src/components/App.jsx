@@ -12,7 +12,11 @@ import { ToastContainer } from 'react-toastify';
 import { ReactComponent as SearchIcon } from '../icons/search.svg';
 // импорт иконки как компонента
 import axios from "axios";
-axios.defaults.baseURL = "https://pixabay.com/api/"
+axios.defaults.baseURL = "https://pixabay.com/api/";
+const API_KEY = '29703536-3492bea623abb7896113a32cf';
+const query = 'cat';
+const page = 1;
+const perPage = 12;
 
 
 export default class App extends Component {
@@ -29,7 +33,7 @@ export default class App extends Component {
     this.setState({ isLoading: true });
     
     try {
-      const response = await axios.get("?key=29703536-3492bea623abb7896113a32cf&q=yellow+flowers&image_type=photo");
+      const response = await axios.get(`?key=${API_KEY}&q=${query}&page=${page}&&image_type=photo&orientation=horizontal&per_page=${perPage}`);
       this.setState({ articles: response.data.hits });
     } catch (error) {
       this.setState({ error });
