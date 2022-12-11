@@ -5,6 +5,9 @@ import Loader from "components/Loader";
 import ImageGallery from "components/ImageGallery";
 import ImageGalleryItem from "components/ImageGalleryItem";
 
+import Error from "components/Error";
+import Empty from "components/Empty";
+
 
 import axios from "axios";
 axios.defaults.baseURL = "https://pixabay.com/api/";
@@ -18,7 +21,6 @@ export default class API extends Component {
     state = {
 
         imageList: null,
-        
         error: null,
         status: 'idle'
     }
@@ -42,25 +44,24 @@ export default class API extends Component {
     };
 
     render() {
-        const { error, status } = this.state;
+        const { error, status, imageList } = this.state;
         const { imgName } = this.props;
-        if (status === 'idle') {
-            return <div>Its Empty</div>
+        if (status === 'idle' || imageList === '') {
+            return <Empty/>
         }
         if (status === 'pending') {
             return <Loader/>
         }
         if (status === 'rejected') {
-            return <div>{error.message}</div>
+            return <Error error={error.message} />
         }
         if (status === 'resolved') {
             return (
                 <div>{imgName}
                 <ImageGallery>
-                 
-                    {/* <ImageGalleryItem articles={image } /> */}
-                    </ImageGallery>
-                    </div>
+                    <ImageGalleryItem imageList={imageList } />
+                </ImageGallery>
+                </div>
 
             );
         }

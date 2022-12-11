@@ -1,9 +1,9 @@
 import React from "react";
-import ErrorImg from '../../img/404.svg'
+import EpmtyImg from '../../img/Empty.webp'
 
-export default function Error({error}) {
+export default function Empty() {
     return (
-        <div role='alert'>
+        <div role='img'>
             <img style={{
                 margin: '0 auto',
                 padding: "12px 16px",
@@ -11,7 +11,7 @@ export default function Error({error}) {
                 backgroundColor: "gray",
     
             }}
-                src={ErrorImg} width='400' alt={error} />
+                src={EpmtyImg} width='400' alt='empty' />
         </div>
     )
 }

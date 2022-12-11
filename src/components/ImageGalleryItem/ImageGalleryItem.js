@@ -6,13 +6,15 @@ import style from './ImageGalleryItem.module.scss';
 
 
 
-export default function ImageGalleryItem({ articles }) {
+export default function ImageGalleryItem({ imageList }) {
    
-
+//     if (imageList === null) {
+//     return
+// }
     return (
         <>
             
-       {articles.map(({ id, webformatURL, tags }) => ( 
+       {imageList.map(({ id, webformatURL, tags }) => ( 
         <li key={ id} className={style.ImageGalleryItem}>
             <img className={style.ImageGalleryItemImage} src={webformatURL} alt={tags} />
             
