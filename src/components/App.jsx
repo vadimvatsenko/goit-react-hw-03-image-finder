@@ -26,18 +26,18 @@ export default class App extends Component {
     error: null,
   }
 
-  async componentDidMount() {
-    this.setState({ isLoading: true });
+  // async componentDidMount() {
+  //   this.setState({ isLoading: true });
     
-    try {
-      const response = await axios.get(`?key=${API_KEY}&q=${query}&page=${page}&&image_type=photo&orientation=horizontal&per_page=${perPage}`);
-      this.setState({ articles: response.data.hits });
-    } catch (error) {
-      this.setState({ error });
-    } finally {
-      this.setState({ isLoading: false });
-    }
-  }
+  //   try {
+  //     const response = await axios.get(`?key=${API_KEY}&q=${query}&page=${page}&&image_type=photo&orientation=horizontal&per_page=${perPage}`);
+  //     this.setState({ articles: response.data.hits });
+  //   } catch (error) {
+  //     this.setState({ error });
+  //   } finally {
+  //     this.setState({ isLoading: false });
+  //   }
+  // }
 
 
   

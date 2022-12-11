@@ -15,8 +15,10 @@ export default class API extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        
-    }
+        if (prevProps.props.imgName !== this.props.imgName) {
+            fetch(`?key=${API_KEY}&q=${query}&page=${this.props.imgName}&image_type=photo&orientation=horizontal&per_page=${perPage}`)
+        }
+    };
 
     render() {
         return (
