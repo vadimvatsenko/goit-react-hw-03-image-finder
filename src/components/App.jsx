@@ -7,16 +7,13 @@ import ImageGalleryItem from "./ImageGalleryItem";
 import Modal from "./Modal";
 import Loader from "./Loader";
 
+import API from "./API";
+
 import { ToastContainer } from 'react-toastify';
 
 import { ReactComponent as SearchIcon } from '../icons/search.svg';
 // импорт иконки как компонента
-import axios from "axios";
-axios.defaults.baseURL = "https://pixabay.com/api/";
-const API_KEY = '29703536-3492bea623abb7896113a32cf';
-const query = 'cat';
-const page = 1;
-const perPage = 12;
+
 
 
 export default class App extends Component {
@@ -55,7 +52,7 @@ export default class App extends Component {
   }
 
   render() {
-    const {openModal, articles, isLoading} = this.state;
+    const {openModal, articles, isLoading, imgName} = this.state;
     return (
       <div>
         <Searchbar onSubmit={this.handleFormSubmit}>
@@ -76,7 +73,7 @@ export default class App extends Component {
           <button type='button' onClick={this.toggleModal}>Close</button>
         </Modal> }
 
-
+        <API imgName={imgName} />
 
       </div>
     
