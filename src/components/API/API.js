@@ -17,23 +17,24 @@ const perPage = 12;
 export default class API extends Component {
     state = {
 
-        image: null,
-        isLoading: false,
+        imageList: null,
+        
         error: null,
+        status: 'idle'
     }
 
     async componentDidUpdate(prevProps, prevState) {
         const prevName = prevProps.imgName;
         const nextName = this.props.imgName
         if (prevName !== nextName) {
-            this.setState({ isLoading: true });
+            this.setState({ status: 'pandings' });
    
     
         try {
-            const response = await axios.get(`?key=${API_KEY}&q=${nextName}&page=${page}&&image_type=photo&orientation=horizontal&per_page=${perPage}`);
-            this.setState({ image: response.data.hits });
+            const response = await axios.get(`?key=${API_KEY}&q=${nextName}&page=${page}&image_type=photo&orientation=horizontal&per_page=${perPage}`);
+            this.setState({ imageList: response.data.hits, status: 'resolved' });
         } catch (error) {
-            this.setState({ error });
+            this.setState({ error, status: 'rejected' });
         } finally {
             this.setState({ isLoading: false });
         }
@@ -41,19 +42,28 @@ export default class API extends Component {
     };
 
     render() {
-        const { isLoading, image, error } = this.state;
+        const { error, status } = this.state;
         const { imgName } = this.props;
-        console.log(image)
-        return (
-            <>
-                {error && <div>Error</div>}
-                {isLoading && <Loader/>}
-                {!imgName && <div>Its Empty</div>}
+        if (status === 'idle') {
+            return <div>Its Empty</div>
+        }
+        if (status === 'pending') {
+            return <Loader/>
+        }
+        if (status === 'rejected') {
+            return <div>{error.message}</div>
+        }
+        if (status === 'resolved') {
+            return (
+                <div>{imgName}
                 <ImageGallery>
                  
                     {/* <ImageGalleryItem articles={image } /> */}
-                </ImageGallery>
-            </>
-        )
+                    </ImageGallery>
+                    </div>
+
+            );
+        }
+        
     }
 }
