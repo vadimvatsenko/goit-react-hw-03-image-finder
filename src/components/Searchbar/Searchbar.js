@@ -42,6 +42,7 @@ export default class Searchbar extends Component {
                         autoFocus
                         placeholder="Search images and photos"
                         onChange={this.handleChangeName}
+                        value={this.state.imgName}
                     />
                 </form>
             </header>
