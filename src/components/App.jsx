@@ -2,10 +2,10 @@ import React, {Component} from "react";
 
 import Searchbar from './Searchbar';
 import SearchBarButton from "./SearchBarButton";
-import ImageGallery from './ImageGallery';
-import ImageGalleryItem from "./ImageGalleryItem";
+// import ImageGallery from './ImageGallery';
+// import ImageGalleryItem from "./ImageGalleryItem";
 import Modal from "./Modal";
-import Loader from "./Loader";
+// import Loader from "./Loader";
 
 import API from "./API";
 
@@ -21,9 +21,9 @@ export default class App extends Component {
     openModal: false,
     imgName: '',
 
-    articles: [],
-    isLoading: false,
-    error: null,
+    // articles: [],
+    
+    // error: null,
   }
 
   // async componentDidMount() {
@@ -62,10 +62,10 @@ export default class App extends Component {
         </Searchbar>
         <ToastContainer/>
         
-        {isLoading && <Loader/>}
+        {/* {isLoading && <Loader/>}
         <ImageGallery>
           <ImageGalleryItem articles={articles } />
-        </ImageGallery>
+        </ImageGallery> */}
         <button type='button' onClick={this.toggleModal}>openModal</button>
         {openModal && <Modal onClose={this.toggleModal}>
           <h1>Это контент модалки</h1>
