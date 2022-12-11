@@ -8,9 +8,6 @@ import style from './ImageGalleryItem.module.scss';
 
 export default function ImageGalleryItem({ imageList }) {
    
-//     if (imageList === null) {
-//     return
-// }
     return (
         <>
             

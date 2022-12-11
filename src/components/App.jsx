@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import Searchbar from './Searchbar';
 import SearchBarButton from "./SearchBarButton";
 import Modal from "./Modal";
-import API from "./API";
+import Gallery from "./Gallery";
 
 import { ToastContainer } from 'react-toastify';
 
@@ -37,7 +37,7 @@ export default class App extends Component {
         </Searchbar>
         <ToastContainer />
         
-        <API imgName={imgName} />
+        <Gallery imgName={imgName} />
         
         <button type='button' onClick={this.toggleModal}>openModal</button>
         {openModal && <Modal onClose={this.toggleModal}>
