@@ -1,29 +1,32 @@
 import { Component } from "react";
-import Loader from "components/Loader";
+
 
 import ImageGallery from "components/ImageGallery";
 import ImageGalleryItem from "components/ImageGalleryItem";
+import Loader from "components/Loader";
 import Error from "components/Error";
 import Empty from "components/Empty";
 import Api from '../../services/API';
-
-console.log(Api.fetchImg);
+import Button from "components/Button";
 
 export default class Gallery extends Component {
     state = {
         imageList: null,
-        page: 2,
+        perPage: 12,
         error: null,
         status: 'idle'
     }
 
     async componentDidUpdate(prevProps) {
         const prevName = prevProps.imgName;
-        const nextName = this.props.imgName
-            if (prevName !== nextName) {
+        const nextName = this.props.imgName;
+        const prevPerPage = prevProps.page;
+        const nextPerPage = this.props.perPage
+
+            if (prevName !== nextName || prevPerPage !== nextPerPage) {
                 this.setState({ status: 'pandings' });
                 try {
-                const imgObj = await Api.fetchImg(nextName, this.state.page)
+                const imgObj = await Api.fetchImg(nextName, this.state.perPage)
                 this.setState({ imageList: imgObj, status: 'resolved' });
             } catch (error) {
                 this.setState({ error, status: 'rejected' });
@@ -34,9 +37,14 @@ export default class Gallery extends Component {
         }
     };
 
+    handleButtonClick = () => {
+        this.setState(prevState => ({
+            perPage: prevState.perPage += 12
+        }))
+    }
+
     render() {
         const { error, status, imageList } = this.state;
-        const { imgName } = this.props;
         if (status === 'idle' || imageList === '') {
             return <Empty/>
         }
@@ -48,11 +56,14 @@ export default class Gallery extends Component {
         }
         if (status === 'resolved') {
             return (
-                <div>{imgName}
+                
                 <ImageGallery>
-                    <ImageGalleryItem imageList={imageList } />
+                    <ImageGalleryItem imageList={imageList} />
+                  {/* {unreadMessages.length > 0 && (
+        <p>You have {unreadMessages.length} unread messages.</p>
+      )}   */}
+                    <Button onClick={this.handleButtonClick } />
                 </ImageGallery>
-                </div>
 
             );
         }
