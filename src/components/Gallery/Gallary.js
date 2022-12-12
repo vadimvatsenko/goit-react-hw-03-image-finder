@@ -5,13 +5,14 @@ import ImageGallery from "components/ImageGallery";
 import ImageGalleryItem from "components/ImageGalleryItem";
 import Error from "components/Error";
 import Empty from "components/Empty";
-import Api from "components/services/API";
+import Api from '../../services/API';
 
-const newApiService = new Api();
+console.log(Api.fetchImg);
 
 export default class Gallery extends Component {
     state = {
         imageList: null,
+        page: 2,
         error: null,
         status: 'idle'
     }
@@ -22,7 +23,7 @@ export default class Gallery extends Component {
             if (prevName !== nextName) {
                 this.setState({ status: 'pandings' });
                 try {
-                const imgObj = await newApiService.fetchImg(nextName);
+                const imgObj = await Api.fetchImg(nextName, this.state.page)
                 this.setState({ imageList: imgObj, status: 'resolved' });
             } catch (error) {
                 this.setState({ error, status: 'rejected' });
