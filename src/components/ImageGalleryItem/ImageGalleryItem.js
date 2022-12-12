@@ -16,7 +16,8 @@ export default function ImageGalleryItem({ imageList }) {
                    src={webformatURL}
                    alt={tags}
                    data-src={largeImageURL}
-                   onClick={ } />
+                   onClick={tags }
+               />
             
            </li>
            ))}
