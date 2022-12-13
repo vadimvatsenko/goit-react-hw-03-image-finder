@@ -3,10 +3,14 @@ import React, {Component} from "react";
 import Searchbar from './Searchbar';
 import SearchBarButton from "./SearchBarButton";
 import Modal from "./Modal";
-import Gallery from "./Gallery";
-
+import ImageGallery from "components/ImageGallery";
+import ImageGalleryItem from "components/ImageGalleryItem";
+import Loader from "components/Loader";
+import Error from "components/Error";
+import Empty from "components/Empty";
+import Api from '../services/API';
+import Button from "components/Button";
 import { ToastContainer } from 'react-toastify';
-
 import { ReactComponent as SearchIcon } from '../icons/search.svg';
 // импорт иконки как компонента
 
@@ -14,8 +18,33 @@ export default class App extends Component {
   state = {
     openModal: false,
     imgName: '',
-    imageList: []
+    imageList: [],
+    error: null,
+    status: 'idle',
+    page: 1,
   }
+
+  async componentDidUpdate(prevProps, prevState) {
+   
+    const prevName = prevState.imgName;
+    const currentName = this.state.imgName;
+    const prevPage = prevState.page;
+    const currentPage = this.state.page;
+
+      if (prevName !== currentName) {
+          this.setState({ status: 'pandings'});
+                try {
+                const imgObj = await Api.fetchImg(currentName, currentPage)
+                this.setState({ imageList: [...this.state.imageList, ...imgObj], status: 'resolved' });
+
+            } catch (error) {
+                this.setState({ error, status: 'rejected' });
+            } finally {
+                this.setState({ isLoading: false });
+            }
+
+        }
+    };
  
   toggleModal = () => {
     this.setState(state => ({
@@ -28,8 +57,14 @@ export default class App extends Component {
 
   }
 
+  handleButtonMore = () => {
+      this.setState(prevState => ({
+          page: prevState.page + 1
+      }))
+  }
+
   render() {
-    const {openModal, imgName} = this.state;
+    const {openModal, imgName, imageList, error, status, page} = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleFormSubmit}>
@@ -38,11 +73,7 @@ export default class App extends Component {
           </SearchBarButton>
         </Searchbar>
         <ToastContainer />
-        
-        <Gallery imgName={imgName}
-          onClick={this.toggleModal}
-       
-        />
+      
       </>
     );
   };
