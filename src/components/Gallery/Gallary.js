@@ -17,16 +17,8 @@ export default class Gallery extends Component {
 
     render() {
         const { error, status, imageList } = this.state;
-        if (status === 'idle') {
-            return <Empty/>
-        }
-        if (status === 'pending') {
-            return <Loader/>
-        }
-        if (status === 'rejected') {
-            return <Error error={error.message} />
-        }
-        if (status === 'resolved') {
+       
+        if () {
             return (
                 
                 <ImageGallery>

@@ -30,20 +30,20 @@ export default class App extends Component {
     const currentName = this.state.imgName;
     const prevPage = prevState.page;
     const currentPage = this.state.page;
+    const currentImageList = this.state.imageList
 
       if (prevName !== currentName) {
           this.setState({ status: 'pandings'});
                 try {
                 const imgObj = await Api.fetchImg(currentName, currentPage)
-                this.setState({ imageList: [...this.state.imageList, ...imgObj], status: 'resolved' });
+                this.setState({ imageList: [...currentImageList, ...imgObj], status: 'resolved' });
 
-            } catch (error) {
-                this.setState({ error, status: 'rejected' });
-            } finally {
-                this.setState({ isLoading: false });
-            }
-
+                } catch (error) {
+                    this.setState({ error, status: 'rejected' });
+                } finally {
+                    this.setState({ isLoading: false });
         }
+      }
     };
  
   toggleModal = () => {
@@ -64,15 +64,41 @@ export default class App extends Component {
   }
 
   render() {
-    const {openModal, imgName, imageList, error, status, page} = this.state;
+    const { openModal, imgName, imageList, error, status, page } = this.state;
+     
+      
+        if () {
+            return 
+        }
     return (
       <>
+        <ToastContainer />
         <Searchbar onSubmit={this.handleFormSubmit}>
           <SearchBarButton aria-label={'search button'}>
             <SearchIcon />
           </SearchBarButton>
         </Searchbar>
-        <ToastContainer />
+        
+        <ImageGallery>
+          {status === 'idle' && (
+          <Empty/>
+          )}
+          {status === 'pending' && (
+         <Loader/>
+          )}
+          {status === 'rejected' && (
+         <Error error={error.message} />
+          )}
+          {status === 'resolved' && (
+            <ImageGallery>
+              <ImageGalleryItem
+                imageList={imageList} />
+            </ImageGallery>
+          )}
+
+         
+            
+         
       
       </>
     );
