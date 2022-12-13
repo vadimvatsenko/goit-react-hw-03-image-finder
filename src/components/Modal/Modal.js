@@ -40,6 +40,7 @@ render() {
     return createPortal(
         <div className={style.overlay} onClick={this.handleBackdropClick}>
             <div className={style.modal}>{this.props.children}</div>
+           
         </div>,
         modalRoot,
     );

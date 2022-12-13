@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-
 import Searchbar from './Searchbar';
 import SearchBarButton from "./SearchBarButton";
 import Modal from "./Modal";
@@ -22,6 +21,7 @@ export default class App extends Component {
     error: null,
     status: 'idle',
     page: 1,
+    // isLoading: false,
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -30,21 +30,29 @@ export default class App extends Component {
     const currentName = this.state.imgName;
     const prevPage = prevState.page;
     const currentPage = this.state.page;
-    const currentImageList = this.state.imageList
+    const currentImageList = this.state.imageList;
 
-      if (prevName !== currentName) {
-          this.setState({ status: 'pandings'});
-                try {
-                const imgObj = await Api.fetchImg(currentName, currentPage)
-                this.setState({ imageList: [...currentImageList, ...imgObj], status: 'resolved' });
+    
 
-                } catch (error) {
-                    this.setState({ error, status: 'rejected' });
-                } finally {
-                    this.setState({ isLoading: false });
+    if (prevName !== currentName || prevPage !==currentPage ) {
+      this.setState({ status: 'pandings', isLoading: true});
+     
+      try {
+         
+        const imgObj = await Api.fetchImg(currentName, currentPage)
+
+        // this.setState({ imageList: [...currentImageList, ...imgObj], status: 'resolved' });
+                this.setState({ imageList: imgObj, status: 'resolved' });
+        } catch (error) {
+        this.setState({ error, status: 'rejected' });
+        } finally {
+        // this.setState({ isLoading: false });
+        <Loader/>
         }
+      
       }
-    };
+        
+  };
  
   toggleModal = () => {
     this.setState(state => ({
@@ -52,24 +60,24 @@ export default class App extends Component {
     }))
   };
 
-  handleFormSubmit = imgName => {
-    this.setState({ imgName: imgName });
+  handleFormSubmit = name => {
+    // name.preventDefault();
+    this.setState({ imgName: name, page: 1  });
+    
+    
 
   }
 
   handleButtonMore = () => {
-      this.setState(prevState => ({
-          page: prevState.page + 1
-      }))
+
+    this.setState(prevState => ({
+      page: prevState.page + 1
+    }))
   }
 
   render() {
     const { openModal, imgName, imageList, error, status, page } = this.state;
      
-      
-        if () {
-            return 
-        }
     return (
       <>
         <ToastContainer />
@@ -79,28 +87,36 @@ export default class App extends Component {
           </SearchBarButton>
         </Searchbar>
         
-        <ImageGallery>
-          {status === 'idle' && (
-          <Empty/>
-          )}
-          {status === 'pending' && (
-         <Loader/>
-          )}
-          {status === 'rejected' && (
-         <Error error={error.message} />
-          )}
-          {status === 'resolved' && (
-            <ImageGallery>
-              <ImageGalleryItem
-                imageList={imageList} />
-            </ImageGallery>
-          )}
+        
+        {status === 'idle' && (
+          <Empty />
+        )}
+        {status === 'pending' && (
+          <Loader />
 
-         
+        )}
+        {status === 'rejected' && (
+          <Error error={error.message} />
+        )}
+        {status === 'resolved' && (
+          <ImageGallery>
+            <ImageGalleryItem
+              imageList={imageList}
+              onClick={ this.toggleModal} />
+          </ImageGallery>
+        )}
+        {/* {imageList.length < 12 && <Button onClick={this.handleButtonMore}/> } */}
+        <Button onClick={this.handleButtonMore} /> 
+        {openModal && <Modal onClose={this.toggleModal} /> }
+        
+
+        
+
+      </>
             
          
       
-      </>
+      
     );
   };
 }
