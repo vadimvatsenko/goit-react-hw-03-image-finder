@@ -10,7 +10,7 @@ import Button from "components/Button";
 
 export default class Gallery extends Component {
     state = {
-        imageList: null,
+        imageList: [],
         error: null,
         status: 'idle',
         page: 1,
@@ -19,13 +19,22 @@ export default class Gallery extends Component {
     async componentDidUpdate(prevProps, prevState) {
         const prevName = prevProps.imgName;
         const nextName = this.props.imgName;
-        console.log(prevState.page)
+        console.log(prevState.page);
+        console.log(prevState.imageList)
+        
 
-            if (prevName !== nextName || prevState.page !== this.state.page ) {
-                this.setState({ status: 'pandings' });
+        if (prevName !== nextName || prevState.page !== this.state.page) {
+                
+                this.setState({ status: 'pandings', imageList: [] });
                 try {
                 const imgObj = await Api.fetchImg(nextName, this.state.page)
-                this.setState({ imageList: imgObj, status: 'resolved' });
+                    this.setState({ imageList: [...this.state.imageList, ...imgObj], status: 'resolved' });
+                    
+                    window.scrollTo({
+              top: document.documentElement.scrollHeight,
+              behavior: 'smooth',
+            });
+
             } catch (error) {
                 this.setState({ error, status: 'rejected' });
             } finally {
@@ -37,7 +46,7 @@ export default class Gallery extends Component {
 
     handleButtonClick = () => {
         this.setState(prevState => ({
-            page: prevState.page += 1
+            page: prevState.page + 1
         }))
     }
 
@@ -57,9 +66,11 @@ export default class Gallery extends Component {
                 
                 <ImageGallery>
                     <ImageGalleryItem imageList={imageList}
-                                        onClick={this.handleButtonClick }
+                                        onClick={this.props.onClick }
                     />
-                    
+
+                    {/* {imageList.length <= 12 && <Button onClick={this.handleButtonClick}/> } */}
+                    <Button onClick={this.handleButtonClick}/>
                 </ImageGallery>
 
             );

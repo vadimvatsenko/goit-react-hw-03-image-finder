@@ -2,7 +2,7 @@ import React from "react";
 import style from './ImageGalleryItem.module.scss';
 
 
-export default function ImageGalleryItem({ imageList }) {
+export default function ImageGalleryItem({ imageList, onClick }) {
    
     return (
         <>
@@ -16,7 +16,7 @@ export default function ImageGalleryItem({ imageList }) {
                    src={webformatURL}
                    alt={tags}
                    data-src={largeImageURL}
-                   onClick={tags }
+                   onClick={onClick }
                />
             
            </li>

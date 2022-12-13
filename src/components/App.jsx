@@ -14,6 +14,7 @@ export default class App extends Component {
   state = {
     openModal: false,
     imgName: '',
+    imageList: []
   }
  
   toggleModal = () => {
@@ -23,7 +24,8 @@ export default class App extends Component {
   };
 
   handleFormSubmit = imgName => {
-    this.setState({imgName: imgName})
+    this.setState({ imgName: imgName });
+
   }
 
   render() {
@@ -39,10 +41,8 @@ export default class App extends Component {
         
         <Gallery imgName={imgName}
           onClick={this.toggleModal}
-          onClose={this.toggleModal}
+       
         />
-        
-        
       </>
     );
   };
