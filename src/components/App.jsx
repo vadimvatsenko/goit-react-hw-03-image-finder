@@ -29,7 +29,7 @@ export default class App extends Component {
   render() {
     const {openModal, imgName} = this.state;
     return (
-      <div>
+      <>
         <Searchbar onSubmit={this.handleFormSubmit}>
           <SearchBarButton aria-label={'search button'}>
             <SearchIcon />
@@ -37,15 +37,13 @@ export default class App extends Component {
         </Searchbar>
         <ToastContainer />
         
-        <Gallery imgName={imgName} />
+        <Gallery imgName={imgName}
+          onClick={this.toggleModal}
+          onClose={this.toggleModal}
+        />
         
-        <button type='button' onClick={this.toggleModal}>openModal</button>
-        {openModal && <Modal onClose={this.toggleModal}>
-          <h1>Это контент модалки</h1>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium corrupti eum voluptates voluptatum animi totam voluptatem adipisci, ipsa dignissimos dolor! Beatae deserunt adipisci, itaque iure provident vero expedita modi? At?</p>
-          <button type='button' onClick={this.toggleModal}>Close</button>
-        </Modal>}
-      </div>
+        
+      </>
     );
   };
 }

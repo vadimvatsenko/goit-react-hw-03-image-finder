@@ -1,6 +1,5 @@
 import { Component } from "react";
 
-
 import ImageGallery from "components/ImageGallery";
 import ImageGalleryItem from "components/ImageGalleryItem";
 import Loader from "components/Loader";
@@ -12,21 +11,20 @@ import Button from "components/Button";
 export default class Gallery extends Component {
     state = {
         imageList: null,
-        perPage: 12,
         error: null,
-        status: 'idle'
+        status: 'idle',
+        page: 1,
     }
 
-    async componentDidUpdate(prevProps) {
+    async componentDidUpdate(prevProps, prevState) {
         const prevName = prevProps.imgName;
         const nextName = this.props.imgName;
-        const prevPerPage = prevProps.page;
-        const nextPerPage = this.props.perPage
+        console.log(prevState.page)
 
-            if (prevName !== nextName || prevPerPage !== nextPerPage) {
+            if (prevName !== nextName || prevState.page !== this.state.page ) {
                 this.setState({ status: 'pandings' });
                 try {
-                const imgObj = await Api.fetchImg(nextName, this.state.perPage)
+                const imgObj = await Api.fetchImg(nextName, this.state.page)
                 this.setState({ imageList: imgObj, status: 'resolved' });
             } catch (error) {
                 this.setState({ error, status: 'rejected' });
@@ -39,7 +37,7 @@ export default class Gallery extends Component {
 
     handleButtonClick = () => {
         this.setState(prevState => ({
-            perPage: prevState.perPage += 12
+            page: prevState.page += 1
         }))
     }
 
@@ -58,11 +56,10 @@ export default class Gallery extends Component {
             return (
                 
                 <ImageGallery>
-                    <ImageGalleryItem imageList={imageList} />
-                  {/* {unreadMessages.length > 0 && (
-        <p>You have {unreadMessages.length} unread messages.</p>
-      )}   */}
-                    <Button onClick={this.handleButtonClick } />
+                    <ImageGalleryItem imageList={imageList}
+                                        onClick={this.handleButtonClick }
+                    />
+                    
                 </ImageGallery>
 
             );
