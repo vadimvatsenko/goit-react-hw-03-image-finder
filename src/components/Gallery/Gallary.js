@@ -23,17 +23,12 @@ export default class Gallery extends Component {
         console.log(prevState.imageList)
         
 
-        if (prevName !== nextName || prevState.page !== this.state.page) {
+        if (prevName !== nextName || prevState.page !== this.state.page ) {
                 
                 this.setState({ status: 'pandings', imageList: [] });
                 try {
                 const imgObj = await Api.fetchImg(nextName, this.state.page)
                     this.setState({ imageList: [...this.state.imageList, ...imgObj], status: 'resolved' });
-                    
-                    window.scrollTo({
-              top: document.documentElement.scrollHeight,
-              behavior: 'smooth',
-            });
 
             } catch (error) {
                 this.setState({ error, status: 'rejected' });
@@ -52,7 +47,7 @@ export default class Gallery extends Component {
 
     render() {
         const { error, status, imageList } = this.state;
-        if (status === 'idle' || imageList === '') {
+        if (status === 'idle' || imageList === []) {
             return <Empty/>
         }
         if (status === 'pending') {
