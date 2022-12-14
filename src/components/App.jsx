@@ -10,6 +10,7 @@ import Empty from "components/Empty";
 import Api from '../services/API';
 import Button from "components/Button";
 import { ToastContainer } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { ReactComponent as SearchIcon } from '../icons/search.svg';
 // импорт иконки как компонента
 
@@ -18,10 +19,12 @@ export default class App extends Component {
     openModal: false,
     imgName: '',
     imageList: [],
+    imageModal: {},
     error: null,
     status: 'idle',
     page: 1,
-    // isLoading: false,
+    totalImg: 0,
+    isLoading: false,
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -31,52 +34,73 @@ export default class App extends Component {
     const prevPage = prevState.page;
     const currentPage = this.state.page;
     const currentImageList = this.state.imageList;
-
+    const prevImageList = prevState.imageList
     
-
+    if (currentName === '') {
+      this.setState({status: 'idle', imageList: [], totalImg: 0 })
+    }
     if (prevName !== currentName || prevPage !==currentPage ) {
-      this.setState({ status: 'pandings', isLoading: true});
+      this.setState({
+        status: 'pandings',
+        isLoading: true,
+        
+        
+      });
      
       try {
          
         const imgObj = await Api.fetchImg(currentName, currentPage)
+        this.setState({
+          imageList: [...currentImageList, ...imgObj.hits],
+          status: 'resolved',
+          totalImg: imgObj.totalHits
+        });
 
-        // this.setState({ imageList: [...currentImageList, ...imgObj], status: 'resolved' });
-                this.setState({ imageList: imgObj, status: 'resolved' });
         } catch (error) {
         this.setState({ error, status: 'rejected' });
         } finally {
-        // this.setState({ isLoading: false });
-        <Loader/>
+        this.setState({ isLoading: false });
         }
       
       }
         
   };
- 
+
   toggleModal = () => {
     this.setState(state => ({
       openModal: !state.openModal
     }))
   };
 
+  getImgModal = ({ target }) => {
+    this.setState({
+      imageModal: {
+        alt: target.alt,
+        src: target.dataset.src,
+      },
+      openModal: true,
+
+    });
+  };
+
   handleFormSubmit = name => {
+    if (name === '') {
+      this.setState({ imgName: '', page: ''  });
+    }
     // name.preventDefault();
     this.setState({ imgName: name, page: 1  });
-    
-    
-
   }
 
-  handleButtonMore = () => {
 
+
+  handleButtonMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1
     }))
   }
 
   render() {
-    const { openModal, imgName, imageList, error, status, page } = this.state;
+    const { openModal, imageList, error, status, imageModal, totalImg } = this.state;
      
     return (
       <>
@@ -102,21 +126,18 @@ export default class App extends Component {
           <ImageGallery>
             <ImageGalleryItem
               imageList={imageList}
-              onClick={ this.toggleModal} />
+              onClick={this.getImgModal}/>
+             
           </ImageGallery>
         )}
-        {/* {imageList.length < 12 && <Button onClick={this.handleButtonMore}/> } */}
-        <Button onClick={this.handleButtonMore} /> 
-        {openModal && <Modal onClose={this.toggleModal} /> }
-        
-
-        
-
+        {totalImg > 12 && (<Button
+          onClick={this.handleButtonMore}/> 
+        )} 
+        {openModal && <Modal
+          onClose={this.toggleModal}
+          imageModal={imageModal}
+        />}
       </>
-            
-         
-      
-      
     );
   };
 }

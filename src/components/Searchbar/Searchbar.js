@@ -14,10 +14,13 @@ export default class Searchbar extends Component {
     handleSubmit = e => {
         e.preventDefault();
         if (this.state.imgName.trim() === '') {
+
             toast.error('Empty search', {
                 autoClose: 1000
             });
+            this.props.onSubmit(null);
             return;
+            
         }
         this.props.onSubmit(this.state.imgName);
         //проп с APP в него передаем значение submit

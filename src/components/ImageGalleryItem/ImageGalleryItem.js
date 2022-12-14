@@ -1,7 +1,5 @@
 import React from "react";
 import style from './ImageGalleryItem.module.scss';
-import Modal from "components/Modal";
-
 
 export default function ImageGalleryItem({ imageList, onClick }) {
    
@@ -18,6 +16,8 @@ export default function ImageGalleryItem({ imageList, onClick }) {
                    alt={tags}
                    data-src={largeImageURL}
                    onClick={onClick}
+                   
+
                    
                />
            
