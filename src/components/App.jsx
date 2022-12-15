@@ -10,7 +10,7 @@ import Empty from "components/Empty";
 import Api from '../services/API';
 import Button from "components/Button";
 import { ToastContainer } from 'react-toastify';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { ReactComponent as SearchIcon } from '../icons/search.svg';
 
 // импорт иконки как компонента
@@ -29,9 +29,7 @@ export default class App extends Component {
   
   }
 
-  async componentDidMount() {
-      await Api.fetchImg()
-  }
+
 
   async componentDidUpdate(prevProps, prevState) {
    
@@ -55,9 +53,9 @@ export default class App extends Component {
     if (prevName !== currentName || prevPage !== currentPage) {
   
         this.setState({
-        // status: 'pending',
-        isLoading: true,  
-      });
+            // status: 'pending',
+            isLoading: true,  
+          });
            try {
          
             const imgObj = await Api.fetchImg(currentName, currentPage)
@@ -117,7 +115,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { openModal, imageList, error, status, imageModal, totalImg } = this.state;
+    const { openModal, imageList, error, status, imageModal, totalImg, isLoading } = this.state;
      
     return (
       <>
@@ -132,19 +130,19 @@ export default class App extends Component {
         {status === 'idle' && (
           <Empty />
         )}
-        {status === 'pending' && (
+        {isLoading && (
           <div style={{
-            display: 'block',
-            marginTop: '20px',
+            position: 'absolute',
+            right: '50%',
+            bottom: '50%',
+ 
             textAlign: 'center',
           }}
           >
              <Loader/>
-            </div>
-          
-          
-
+          </div>
         )}
+    
         {status === 'rejected' && (
           <Error error={error.message} />
         )}
@@ -153,8 +151,9 @@ export default class App extends Component {
             <ImageGalleryItem
               imageList={imageList}
               onClick={this.getImgModal}/>
-             
+
           </ImageGallery>
+          
         )}
         {totalImg !== imageList.length && (<Button
           onClick={this.handleButtonMore}/> 
@@ -167,3 +166,21 @@ export default class App extends Component {
     );
   };
 }
+
+
+
+
+
+      // {status === 'pending' && (
+      //     <div style={{
+      //       position: 'absolute',
+      //       display: 'block',
+      //       right: '50%',
+      //       bottom: '50%',
+      //       marginTop: '20px',
+      //       textAlign: 'center',
+      //     }}
+      //     >
+      //        <Loader/>
+      //     </div>
+      //   )}
