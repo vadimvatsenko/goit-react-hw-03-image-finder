@@ -25,56 +25,48 @@ export default class App extends Component {
     page: 1,
     totalImg: 0,
     isLoading: false,
+  
   }
-
-  componentDidMount() {
-    const fetchImg = this.fetchImg(this.state.imgName, this.state.page)
-    this.setState({
-      imageList: fetchImg.hits
-    })
-      
-  }
-
-  async fetchImg(currentName, currentPage) {
-    const imgObj = await Api.fetchImg(currentName, currentPage)
-  }
-
-  // async componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
    
-  //   const prevName = prevState.imgName;
-  //   const currentName = this.state.imgName;
-  //   const prevPage = prevState.page;
-  //   const currentPage = this.state.page;
-  //   const currentImageList = this.state.imageList;
-  //   const prevImageList = prevState.imageList
+    const prevName = prevState.imgName;
+    const currentName = this.state.imgName;
+    const prevPage = prevState.page;
+    const currentPage = this.state.page;
+    const currentImageList = this.state.imageList;
+    const prevImageList = prevState.imageList
     
-
-  //   if (prevName !== currentName || prevPage !== currentPage) {
-  //     this.setState({
-  //       status: 'pandings',
-  //       isLoading: true,  
-
-  //     });
+    if (currentName.trim() === '') {
+      this.setState({
+        status: "idle"
+      })
+    }
+    if (prevName !== currentName || prevPage !== currentPage) {
+      this.setState({
+        status: 'pandings',
+        isLoading: true,  
+      });
      
-  //     try {
+      try {
          
-  //       const imgObj = await Api.fetchImg(currentName, currentPage)
-  //       this.setState({
-  //         imageList: [...currentImageList, ...imgObj.hits],
-  //         status: 'resolved',
-  //         totalImg: imgObj.totalHits,
+        const imgObj = await Api.fetchImg(currentName, currentPage)
+        this.setState({
+          imageList: [...currentImageList, ...imgObj.hits],
+          status: 'resolved',
+          totalImg: imgObj.totalHits,
 
-  //       });
 
-  //       } catch (error) {
-  //       this.setState({ error, status: 'rejected' });
-  //       } finally {
-  //       this.setState({ isLoading: false });
-  //       }
+        });
+
+        } catch (error) {
+        this.setState({ error, status: 'rejected' });
+        } finally {
+        this.setState({ isLoading: false });
+        }
       
-  //     }
+      }
         
-  // };
+  };
 
 
   toggleModal = () => {
@@ -95,24 +87,18 @@ export default class App extends Component {
   };
 
   handleFormSubmit = name => {
+    this.setState({ imgName: name });
+    if (name !== this.state.imgName) {
+      this.setState({
+        imgName: name,
+        imageList: [],
+        page: 1,
 
-      this.setState({ imgName: name, page: 1 });
-      this.setState(prevState => {
-        if (prevState.imgName !== name || name === '') {
-          return {
-            imageList: [],
-            imgName: name,
-            page: 1,
-
-          }
-        } else {
-          return {
-            page: prevState.page + 1,
-          };
-        }
       })
-    
     }
+  }
+      
+
   
   handleButtonMore = () => {
     this.setState(prevState => ({

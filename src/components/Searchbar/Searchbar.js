@@ -13,19 +13,30 @@ export default class Searchbar extends Component {
     };
     handleSubmit = e => {
         e.preventDefault();
-        if (this.state.imgName.trim() === '') {
-
-            toast.error('Empty search', {
-                autoClose: 1000
-            });
-           
-            
-        }
         this.props.onSubmit(this.state.imgName);
         //проп с APP в него передаем значение submit
         this.setState({ imgName: '' })
-        //очистка после submit
+        //очистка после submit      
+        
     };
+
+    //  handleSubmit = e => {
+    //     e.preventDefault();
+
+        
+    //     if (this.state.imgName.trim() === '') {
+
+    //         toast.error('Empty search', {
+    //             autoClose: 1000
+    //         });
+           
+            
+    //     }
+    //     this.props.onSubmit(this.state.imgName);
+    //     //проп с APP в него передаем значение submit
+    //     this.setState({ imgName: '' })
+    //     //очистка после submit
+    // };
 
     render() { 
         return (
