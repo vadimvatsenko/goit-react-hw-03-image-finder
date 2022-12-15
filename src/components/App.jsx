@@ -9,7 +9,7 @@ import Error from "components/Error";
 import Empty from "components/Empty";
 import Api from '../services/API';
 import Button from "components/Button";
-import { ToastContainer } from 'react-toastify';
+// import { ToastContainer } from 'react-toastify';
 // import { toast } from 'react-toastify';
 import { ReactComponent as SearchIcon } from '../icons/search.svg';
 
@@ -39,11 +39,13 @@ export default class App extends Component {
     const currentPage = this.state.page;
     const currentImageList = this.state.imageList;
     
-    if (currentName.trim() === '') {
-        this.setState({
-        status: "idle"
-      });
-    }
+    // if (currentName.trim() === '' || currentImageList === []) {
+    //     this.setState({
+    //       status: "idle",
+    //       totalImg: 1,
+          
+    //   });
+    // }
      if (prevState.isLoading === true && !this.state.isLoading) {
       window.scrollTo({
         top: document.documentElement.scrollHeight,
@@ -101,8 +103,13 @@ export default class App extends Component {
         imgName: name,
         imageList: [],
         page: 1,
+        
 
       })
+
+    }
+    if (name.trim() === '') {
+      return;
     }
   }
       
@@ -119,7 +126,7 @@ export default class App extends Component {
      
     return (
       <>
-        <ToastContainer />
+        {/* <ToastContainer /> */}
         <Searchbar onSubmit={this.handleFormSubmit}>
           <SearchBarButton aria-label={'search button'}>
             <SearchIcon />
@@ -135,7 +142,7 @@ export default class App extends Component {
             position: 'absolute',
             right: '50%',
             bottom: '50%',
- 
+            transform: 'translate(-50%, -50%)',
             textAlign: 'center',
           }}
           >

@@ -1,6 +1,5 @@
 import style from '../Searchbar/Searchbar.module.scss';
 import React, { Component } from "react";
-import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 export default class Searchbar extends Component {
