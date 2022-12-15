@@ -37,9 +37,13 @@ export default class App extends Component {
     const prevImageList = prevState.imageList
     
     if (currentName.trim() === '') {
+      toast.error('Empty search', {
+                autoClose: 1000
+            });
       this.setState({
         status: "idle"
-      })
+      });
+      
     }
     if (prevName !== currentName || prevPage !== currentPage) {
       this.setState({
