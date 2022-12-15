@@ -12,6 +12,7 @@ import Button from "components/Button";
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import { ReactComponent as SearchIcon } from '../icons/search.svg';
+
 // импорт иконки как компонента
 
 export default class App extends Component {
@@ -27,6 +28,11 @@ export default class App extends Component {
     isLoading: false,
   
   }
+
+  async componentDidMount() {
+      await Api.fetchImg()
+  }
+
   async componentDidUpdate(prevProps, prevState) {
    
     const prevName = prevState.imgName;
@@ -34,41 +40,41 @@ export default class App extends Component {
     const prevPage = prevState.page;
     const currentPage = this.state.page;
     const currentImageList = this.state.imageList;
-    const prevImageList = prevState.imageList
     
     if (currentName.trim() === '') {
-      toast.error('Empty search', {
-                autoClose: 1000
-            });
-      this.setState({
+        this.setState({
         status: "idle"
       });
-      
+    }
+     if (prevState.isLoading === true && !this.state.isLoading) {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+      });
     }
     if (prevName !== currentName || prevPage !== currentPage) {
-      this.setState({
-        status: 'pandings',
+  
+        this.setState({
+        // status: 'pending',
         isLoading: true,  
       });
-     
-      try {
+           try {
          
-        const imgObj = await Api.fetchImg(currentName, currentPage)
-        this.setState({
-          imageList: [...currentImageList, ...imgObj.hits],
-          status: 'resolved',
-          totalImg: imgObj.totalHits,
+            const imgObj = await Api.fetchImg(currentName, currentPage)
+            this.setState({
 
-
-        });
-
-        } catch (error) {
-        this.setState({ error, status: 'rejected' });
-        } finally {
-        this.setState({ isLoading: false });
-        }
-      
-      }
+              imageList: [...currentImageList, ...imgObj.hits],
+              status: 'resolved',
+              totalImg: imgObj.totalHits,
+              });
+            
+              } catch (error) {
+              this.setState({ error, status: 'rejected' });
+              } finally {
+              this.setState({ isLoading: false });
+              }
+   
+    }
         
   };
 
@@ -127,7 +133,16 @@ export default class App extends Component {
           <Empty />
         )}
         {status === 'pending' && (
-          <Loader />
+          <div style={{
+            display: 'block',
+            marginTop: '20px',
+            textAlign: 'center',
+          }}
+          >
+             <Loader/>
+            </div>
+          
+          
 
         )}
         {status === 'rejected' && (
