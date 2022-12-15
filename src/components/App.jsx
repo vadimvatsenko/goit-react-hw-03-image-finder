@@ -10,7 +10,7 @@ import Empty from "components/Empty";
 import Api from '../services/API';
 import Button from "components/Button";
 import { ToastContainer } from 'react-toastify';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { ReactComponent as SearchIcon } from '../icons/search.svg';
 // импорт иконки как компонента
 
@@ -27,44 +27,55 @@ export default class App extends Component {
     isLoading: false,
   }
 
-  async componentDidUpdate(prevProps, prevState) {
-   
-    const prevName = prevState.imgName;
-    const currentName = this.state.imgName;
-    const prevPage = prevState.page;
-    const currentPage = this.state.page;
-    const currentImageList = this.state.imageList;
-    // const prevImageList = prevState.imageList
-    
-    if (currentName === '') {
-      this.setState({status: 'idle', imageList: [], totalImg: 0 })
-    }
-    if (prevName !== currentName || prevPage !==currentPage ) {
-      this.setState({
-        status: 'pandings',
-        isLoading: true,
-        
-        
-      });
-     
-      try {
-         
-        const imgObj = await Api.fetchImg(currentName, currentPage)
-        this.setState({
-          imageList: [...currentImageList, ...imgObj.hits],
-          status: 'resolved',
-          totalImg: imgObj.totalHits
-        });
-
-        } catch (error) {
-        this.setState({ error, status: 'rejected' });
-        } finally {
-        this.setState({ isLoading: false });
-        }
+  componentDidMount() {
+    const fetchImg = this.fetchImg(this.state.imgName, this.state.page)
+    this.setState({
+      imageList: fetchImg.hits
+    })
       
-      }
+  }
+
+  async fetchImg(currentName, currentPage) {
+    const imgObj = await Api.fetchImg(currentName, currentPage)
+  }
+
+  // async componentDidUpdate(prevProps, prevState) {
+   
+  //   const prevName = prevState.imgName;
+  //   const currentName = this.state.imgName;
+  //   const prevPage = prevState.page;
+  //   const currentPage = this.state.page;
+  //   const currentImageList = this.state.imageList;
+  //   const prevImageList = prevState.imageList
+    
+
+  //   if (prevName !== currentName || prevPage !== currentPage) {
+  //     this.setState({
+  //       status: 'pandings',
+  //       isLoading: true,  
+
+  //     });
+     
+  //     try {
+         
+  //       const imgObj = await Api.fetchImg(currentName, currentPage)
+  //       this.setState({
+  //         imageList: [...currentImageList, ...imgObj.hits],
+  //         status: 'resolved',
+  //         totalImg: imgObj.totalHits,
+
+  //       });
+
+  //       } catch (error) {
+  //       this.setState({ error, status: 'rejected' });
+  //       } finally {
+  //       this.setState({ isLoading: false });
+  //       }
+      
+  //     }
         
-  };
+  // };
+
 
   toggleModal = () => {
     this.setState(state => ({
@@ -84,15 +95,25 @@ export default class App extends Component {
   };
 
   handleFormSubmit = name => {
-    if (name === '') {
-      this.setState({ imgName: '', page: ''  });
+
+      this.setState({ imgName: name, page: 1 });
+      this.setState(prevState => {
+        if (prevState.imgName !== name || name === '') {
+          return {
+            imageList: [],
+            imgName: name,
+            page: 1,
+
+          }
+        } else {
+          return {
+            page: prevState.page + 1,
+          };
+        }
+      })
+    
     }
-    // name.preventDefault();
-    this.setState({ imgName: name, page: 1  });
-  }
-
-
-
+  
   handleButtonMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1
@@ -130,7 +151,7 @@ export default class App extends Component {
              
           </ImageGallery>
         )}
-        {totalImg > 12 && (<Button
+        {totalImg !== imageList.length && (<Button
           onClick={this.handleButtonMore}/> 
         )} 
         {openModal && <Modal
