@@ -34,7 +34,7 @@ export default class App extends Component {
     const prevPage = prevState.page;
     const currentPage = this.state.page;
     const currentImageList = this.state.imageList;
-    const prevImageList = prevState.imageList
+    // const prevImageList = prevState.imageList
     
     if (currentName === '') {
       this.setState({status: 'idle', imageList: [], totalImg: 0 })

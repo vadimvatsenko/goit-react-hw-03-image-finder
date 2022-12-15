@@ -6,6 +6,7 @@ export default function Error({error}) {
         <div role='alert'>
             <img style={{
                 margin: '0 auto',
+                marginTop: '20px',
                 padding: "12px 16px",
                 borderRadius: 10,
                 backgroundColor: "gray",
