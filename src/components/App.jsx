@@ -88,17 +88,21 @@ export default class App extends Component {
             status: 'idle'
           })
           return
-        }
+      }
         if (imgObj.totalHits > 12) {
         
         this.setState({
           button: true
         })
       }
+
+      if (imageList.length === totalImg) {
+        this.setState({
+            button: false
+          })
+        }
       
-      
-          
-              } catch (error) {
+      } catch (error) {
               this.setState({ error, status: 'rejected' });
               } finally {
               this.setState({ isLoading: false });
