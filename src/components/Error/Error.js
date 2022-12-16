@@ -1,7 +1,9 @@
 import React from "react";
 import ErrorImg from '../../img/404.svg'
 
-export default function Error({error}) {
+
+export default function Error({ error }) {
+   
     return (
         <div role='alert'>
             <img style={{
@@ -16,3 +18,4 @@ export default function Error({error}) {
         </div>
     )
 }
+
