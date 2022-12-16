@@ -89,7 +89,7 @@ export default class App extends Component {
           button: true
         })
       }
-      i
+      
       
             this.setState({
               imageList: [...imageList, ...imgObj.hits],
