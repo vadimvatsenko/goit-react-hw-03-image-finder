@@ -96,17 +96,17 @@ export default class App extends Component {
         })
       }
 
-      if (imageList.length === totalImg) {
+      if (page === totalPage ) {
         this.setState({
             button: false
           })
         }
       
       } catch (error) {
-              this.setState({ error, status: 'rejected' });
-              } finally {
-              this.setState({ isLoading: false });
-             }
+          this.setState({ error, status: 'rejected' });
+      } finally {
+          this.setState({ isLoading: false });
+      }
   }
 
   toggleModal = () => {
@@ -116,7 +116,7 @@ export default class App extends Component {
   };
 
   getImgModal = ({ target }) => {
-    console.log(target)
+
     this.setState({
       imageModal: {
         alt: target.alt,
