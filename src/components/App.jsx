@@ -31,7 +31,7 @@ export default class App extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const {imgName, imageList, page, isLoading, totalImg} = this.state
+    const {imgName, page, isLoading} = this.state
     const prevName = prevState.imgName;
     const prevPage = prevState.page;
     const prevLoading = prevState.isLoading;
@@ -61,7 +61,7 @@ export default class App extends Component {
   };
 
   getImgObj = async () => {
-    const { imgName, page, imageList, totalImg } = this.state;
+    const { imgName, page, imageList} = this.state;
 
     try {
       const imgObj = await Api.fetchImg(imgName, page);
@@ -120,7 +120,7 @@ export default class App extends Component {
     this.setState({
       imageModal: {
         alt: target.alt,
-        src: target.dataset.src,
+        src: target.dataset.src
       },
       openModal: true,
 
