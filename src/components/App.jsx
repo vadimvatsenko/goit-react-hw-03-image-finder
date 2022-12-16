@@ -66,24 +66,30 @@ export default class App extends Component {
     try {
       const imgObj = await Api.fetchImg(imgName, page);
       const totalPage = Math.ceil(imgObj.totalHits / 12);
-      console.log(totalPage);
 
-      if (imgObj.totalHits >= 1 && imageList.length < 12 ) {
+      this.setState({
+          imageList: [...imageList, ...imgObj.hits],
+          status: 'resolved',
+          totalImg: imgObj.totalHits,
+          isLoading: false,
+      });
+      
+        if (imgObj.totalHits >= 1 && imageList.length < 12 ) {
           toast.success(`We find ${imgObj.totalHits} images `, {
           theme: "colored"
         })
       }
 
-      if (imgObj.totalHits === 0) {
-        toast.error(`Hey, enter something normal`, {
-          theme: "colored"
-        })
-        this.setState({
-          status: 'idle'
-        })
-        return
-      }
-      if (imgObj.totalHits > 12) {
+        if (imgObj.totalHits === 0) {
+          toast.error(`Hey, enter something normal`, {
+            theme: "colored"
+          })
+          this.setState({
+            status: 'idle'
+          })
+          return
+        }
+        if (imgObj.totalHits > 12) {
         
         this.setState({
           button: true
@@ -91,13 +97,7 @@ export default class App extends Component {
       }
       
       
-            this.setState({
-              imageList: [...imageList, ...imgObj.hits],
-              status: 'resolved',
-              totalImg: imgObj.totalHits,
-              isLoading: false,
-              
-            });
+          
               } catch (error) {
               this.setState({ error, status: 'rejected' });
               } finally {
