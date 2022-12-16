@@ -27,7 +27,7 @@ export default class App extends Component {
     totalImg: 0,
     isLoading: false,
     toast: false,
-  
+    button: false
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -37,41 +37,59 @@ export default class App extends Component {
     const prevLoading = prevState.isLoading;
 
     if (imgName === '') {
+      toast.error(`Hey, enter something normal`, {
+          theme: "colored"
+      })
+
       return
     }
       
-      if (prevName !== imgName || prevPage !== page) {
-        this.setState({
-            // status: 'pending',// плохо работает, перезагружает страницу, использую isLoading
-            isLoading: true,  
-        });
-        this.getImgObj();
-   
+    if (prevName !== imgName || prevPage !== page) {
+      this.setState({
+        // status: 'pending',// плохо работает, перезагружает страницу, использую isLoading
+        isLoading: true,
+      });
+      this.getImgObj();
+    }
       if (prevLoading === true && !isLoading) {
       window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: 'smooth',
       });
       }
-    }
+    
   };
 
   getImgObj = async () => {
-    const { imgName, page, imageList } = this.state;
+    const { imgName, page, imageList, totalImg } = this.state;
+
     try {
-         
       const imgObj = await Api.fetchImg(imgName, page);
+      const totalPage = Math.ceil(imgObj.totalHits / 12);
+      console.log(totalPage);
+
       if (imgObj.totalHits >= 1 && imageList.length < 12 ) {
-        toast.success(`We find ${imgObj.totalHits} images `, {
+          toast.success(`We find ${imgObj.totalHits} images `, {
           theme: "colored"
         })
       }
-      if (imgName === ''){
-         toast.error('Nothing found', {
-        theme: 'colored'
-      })
-        
+
+      if (imgObj.totalHits === 0) {
+        toast.error(`Hey, enter something normal`, {
+          theme: "colored"
+        })
+        this.setState({
+          status: 'idle'
+        })
+        return
       }
+      if (imgObj.totalHits > 12) {
+        
+        this.setState({
+          button: true
+        })
+      }
+      i
       
             this.setState({
               imageList: [...imageList, ...imgObj.hits],
@@ -120,7 +138,8 @@ export default class App extends Component {
         imgName: '',
         imageList: [],
         status: 'idle',
-        page: 1
+        page: 1,
+        button: false,
       })
      
     }
@@ -134,7 +153,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { openModal, imageList, error, status, imageModal, totalImg, isLoading } = this.state;
+    const { openModal, imageList, error, status, imageModal, isLoading, button } = this.state;
      
     return (
       <>
@@ -173,9 +192,9 @@ export default class App extends Component {
             </ImageGallery>
           
         )}
-        {totalImg !== imageList.length && (<Button
-          onClick={this.handleButtonMore}/> 
-        )} 
+        {button && (<Button
+          onClick={this.handleButtonMore} />)}
+      
         {openModal && <Modal
           onClose={this.toggleModal}
           imageModal={imageModal}
