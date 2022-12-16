@@ -66,7 +66,7 @@ export default class App extends Component {
           theme: "colored"
         })
       }
-      if (imageList.length === 0){
+      if (imgName === ''){
          toast.error('Nothing found', {
         theme: 'colored'
       })
@@ -112,13 +112,15 @@ export default class App extends Component {
       this.setState({
         imgName: name,
         imageList: [],
+        page: 1
       })
     }
     if (name.trim() === '') {
       this.setState({
         imgName: '',
         imageList: [],
-        status: 'idle'
+        status: 'idle',
+        page: 1
       })
      
     }

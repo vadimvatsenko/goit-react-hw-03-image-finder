@@ -5,13 +5,16 @@
  */
 .ImageGallery {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 10px;
     flex-wrap: wrap;
     width: 1200px;
 
+    text-align: center;
+
 
     margin-top: 20px;
-    margin-bottom: -10px;
+
     padding: 0;
     list-style: none;
     margin-left: auto;
