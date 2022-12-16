@@ -9,8 +9,8 @@ import Error from "components/Error";
 import Empty from "components/Empty";
 import Api from '../services/API';
 import Button from "components/Button";
-// import { ToastContainer } from 'react-toastify';
-// import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { ReactComponent as SearchIcon } from '../icons/search.svg';
 
 // импорт иконки как компонента
@@ -26,58 +26,66 @@ export default class App extends Component {
     page: 1,
     totalImg: 0,
     isLoading: false,
+    toast: false,
   
   }
 
-
-
   async componentDidUpdate(prevProps, prevState) {
-   
+    const {imgName, imageList, page, isLoading, totalImg} = this.state
     const prevName = prevState.imgName;
-    const currentName = this.state.imgName;
     const prevPage = prevState.page;
-    const currentPage = this.state.page;
-    const currentImageList = this.state.imageList;
-    
-    // if (currentName.trim() === '' || currentImageList === []) {
-    //     this.setState({
-    //       status: "idle",
-    //       totalImg: 1,
-          
-    //   });
-    // }
-     if (prevState.isLoading === true && !this.state.isLoading) {
+    const prevLoading = prevState.isLoading;
+
+    if (imgName === '') {
+      return
+    }
+      
+      if (prevName !== imgName || prevPage !== page) {
+        this.setState({
+            // status: 'pending',// плохо работает, перезагружает страницу, использую isLoading
+            isLoading: true,  
+        });
+        this.getImgObj();
+   
+      if (prevLoading === true && !isLoading) {
       window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: 'smooth',
       });
+      }
     }
-    if (prevName !== currentName || prevPage !== currentPage) {
-  
-        this.setState({
-            // status: 'pending',
-            isLoading: true,  
-          });
-           try {
-         
-            const imgObj = await Api.fetchImg(currentName, currentPage)
-            this.setState({
+  };
 
-              imageList: [...currentImageList, ...imgObj.hits],
+  getImgObj = async () => {
+    const { imgName, page, imageList } = this.state;
+    try {
+         
+      const imgObj = await Api.fetchImg(imgName, page);
+      if (imgObj.totalHits >= 1 && imageList.length < 12 ) {
+        toast.success(`We find ${imgObj.totalHits} images `, {
+          theme: "colored"
+        })
+      }
+      if (imageList.length === 0){
+         toast.error('Nothing found', {
+        theme: 'colored'
+      })
+        
+      }
+      
+            this.setState({
+              imageList: [...imageList, ...imgObj.hits],
               status: 'resolved',
               totalImg: imgObj.totalHits,
-              });
-            
+              isLoading: false,
+              
+            });
               } catch (error) {
               this.setState({ error, status: 'rejected' });
               } finally {
               this.setState({ isLoading: false });
-              }
-   
-    }
-        
-  };
-
+             }
+  }
 
   toggleModal = () => {
     this.setState(state => ({
@@ -86,6 +94,7 @@ export default class App extends Component {
   };
 
   getImgModal = ({ target }) => {
+    console.log(target)
     this.setState({
       imageModal: {
         alt: target.alt,
@@ -97,22 +106,23 @@ export default class App extends Component {
   };
 
   handleFormSubmit = name => {
+    const { imgName } = this.state
     this.setState({ imgName: name });
-    if (name !== this.state.imgName) {
+    if (name !== imgName) {
       this.setState({
         imgName: name,
         imageList: [],
-        page: 1,
-        
-
       })
-
     }
     if (name.trim() === '') {
-      return;
+      this.setState({
+        imgName: '',
+        imageList: [],
+        status: 'idle'
+      })
+     
     }
   }
-      
 
   
   handleButtonMore = () => {
@@ -126,7 +136,7 @@ export default class App extends Component {
      
     return (
       <>
-        {/* <ToastContainer /> */}
+        <ToastContainer autoClose={1000} />
         <Searchbar onSubmit={this.handleFormSubmit}>
           <SearchBarButton aria-label={'search button'}>
             <SearchIcon />
@@ -158,8 +168,7 @@ export default class App extends Component {
             <ImageGalleryItem
               imageList={imageList}
               onClick={this.getImgModal}/>
-
-          </ImageGallery>
+            </ImageGallery>
           
         )}
         {totalImg !== imageList.length && (<Button
